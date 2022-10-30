@@ -1,3 +1,5 @@
+"""This module imports data."""
+
 import sys
 from glob import glob
 import pandas as pd

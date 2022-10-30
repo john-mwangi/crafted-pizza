@@ -1,3 +1,5 @@
+"""This module summarises financial performance."""
+
 import pandas as pd
 from datetime import datetime
 
