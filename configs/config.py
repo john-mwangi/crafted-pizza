@@ -1,8 +1,8 @@
 import pathlib
 
 ROOT_DIR = pathlib.Path(__file__).parent.parent.resolve()
-EXPENSES_DIR = ROOT_DIR / "data/raw/expenses"
-SALES_DIR = ROOT_DIR / "data/raw/sales"
+EXPENSES_DIR = ROOT_DIR / "data/expenses"
+SALES_DIR = ROOT_DIR / "data/sales"
 
 # Price lists (lowest)
 pizza_large = (850, 900, 950, 1000)
