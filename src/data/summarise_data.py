@@ -63,27 +63,25 @@ def summarise_profit(
         KB_profit=lambda df: df.KB_sales - df.KB_expenses,
         KK_profit=lambda df: df.KK_sales - df.KK_expenses,
         total_profit=lambda df: df.total_sales - df.total_expenses,
-    )
+    )[lambda df: (df.index >= start_period) & (df.index <= end_period)]
 
     print(profit_summary)
 
     print(f"\nprofit this period: {start_period} - {end_period}")
 
-    total_profit_this_year = profit_summary[
-        (profit_summary.index >= start_period)
-        & (profit_summary.index <= end_period)
-    ].total_profit.sum()
+    total_profit = profit_summary.total_profit.sum()
+    KB_profit = profit_summary.KB_profit.sum()
+    KK_profit = profit_summary.KK_profit.sum()
 
-    KB_profit_this_year = profit_summary[
-        (profit_summary.index >= start_period)
-        & (profit_summary.index <= end_period)
-    ].KB_profit.sum()
+    print("\ntotal profit:", total_profit)
+    print("kabete profit:", KB_profit)
+    print("kikuyu profit:", KK_profit)
 
-    KK_profit_this_year = profit_summary[
-        (profit_summary.index >= start_period)
-        & (profit_summary.index <= end_period)
-    ].KK_profit.sum()
+    results = {
+        "profit_summary": profit_summary,
+        "total_profit": total_profit,
+        "KB_profit": KB_profit,
+        "KK_profit": KK_profit,
+    }
 
-    print("\ntotal profit:", total_profit_this_year)
-    print("kabete profit:", KB_profit_this_year)
-    print("kikuyu profit:", KK_profit_this_year)
+    return results
