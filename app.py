@@ -1,8 +1,7 @@
 import streamlit as st
 from src.data import import_data, summarise_data
 from datetime import datetime
-import pathlib
-import base64
+import sys
 
 st.title("Crafted Pizza App")
 
@@ -36,27 +35,24 @@ with st.sidebar:
         end_period = st.date_input(label="End Period", value=datetime.now())
         end_period = int(end_period.strftime("%Y%m"))
 
-    sales_path = st.text_input(
-        label="Sales path",
-        help="Path to the folder containing sales data e.g. C:/data/sales/",
+    sales_data = st.file_uploader(
+        label="Sales Data", type="xlsx", accept_multiple_files=True
     )
-
-    expenses_path = st.text_input(
-        label="Expenses path",
-        help="Path to the folder containing expenses data e.g. C:/data/expenses/",
+    expenses_data = st.file_uploader(
+        label="Expenses Data", type="csv", accept_multiple_files=True
     )
 
 
 @st.cache
-def get_results():
-    sales_data = import_data.read_sales_data(sales_path)
+def get_results(sales_data, expenses_data):
+    sales_data = import_data.read_sales_data(sales_data)
     sales_data = import_data.extract_revenue(sales_data)
     sales_data = import_data.extract_sales_date(sales_data)
     sales_summary = summarise_data.summarise_performance(
         performance_data=sales_data, on_col="revenue"
     )
 
-    expenses_data = import_data.read_expenses_data(expenses_path)
+    expenses_data = import_data.read_expenses_data(expenses_data)
     expenses_summary = summarise_data.summarise_performance(
         performance_data=expenses_data, on_col="expenses"
     )
@@ -71,15 +67,12 @@ def get_results():
     return results
 
 
-if sales_path == "" or expenses_path == "":
+if len(sales_data) == 0 or len(expenses_data) == 0:
     st.write("*Enter the paths to the sales and expenses data to start!*")
 
-if sales_path != "" and expenses_path != "":
-    sales_path = pathlib.Path(sales_path).resolve()
-    expenses_path = pathlib.Path(expenses_path).resolve()
-
+if len(sales_data) > 0 and len(expenses_data) > 0:
     try:
-        results = get_results()
+        results = get_results(sales_data, expenses_data)
 
         period_df = results.get("profit_summary")
 
