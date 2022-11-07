@@ -53,6 +53,7 @@ def download_data(real_file_id):
 
 
 def create_download_link(file_path):
+    # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806/12?page=3
     file_bytes = Path(file_path).read_bytes()
     b64 = base64.b64encode(file_bytes).decode()
     html = f'<a href="data:application/octet-stream;base64,{b64}" download="sales_template.xlsx">Data template</a>'
