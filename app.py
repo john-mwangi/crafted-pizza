@@ -53,16 +53,20 @@ def download_data(real_file_id):
 
 
 def create_download_link(file_path):
+    """
+    str -> bytes -> enc b64 bytes -> b64 str -> dec b64 str -> str
+    my_string -> my_string.encode() -> b64encode(my_bytes) -> b64.decode()** -> b64decode(b64) -> my_bytes.decode()
+    """
     # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806/12?page=3
     file_bytes = Path(file_path).read_bytes()
-    b64 = base64.b64encode(file_bytes).decode()
-    html = f'<a href="data:application/octet-stream;base64,{b64}" download="sales_template.xlsx">Data template</a>'
+    b64_str = base64.b64encode(file_bytes).decode()
+    html = f'<a href="data:application/octet-stream;base64,{b64_str}" download="sales_template.xlsx">Data template</a>'
     return html
 
 
 html = create_download_link("./www/Nov2021.xlsx")
 
-# SIDEBAR
+# SIDE BAR
 with st.sidebar:
     st.markdown(html, unsafe_allow_html=True)
 
@@ -101,7 +105,7 @@ with st.expander(label="Instructions"):
     )
 
 if len(sales_data) == 0 or len(expenses_data) == 0:
-    st.write("*Enter the paths to the sales and expenses data to start!*")
+    st.write("*Use the sidebar to upload sales and expenses data to start!*")
 
 if len(sales_data) > 0 and len(expenses_data) > 0:
     try:
