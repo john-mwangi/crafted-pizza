@@ -1,10 +1,6 @@
 """This module imports data."""
 
-import sys
 import pandas as pd
-
-sys.path.append("../../")
-from configs import config
 
 
 def read_sales_data(sales_data: list) -> pd.DataFrame:
@@ -22,21 +18,36 @@ def read_sales_data(sales_data: list) -> pd.DataFrame:
                 path, sheet_name="Sheet1", names=["data"], header=None
             )
             kk_sales["branch"] = "KK"
-            kk_sales["filename"] = path.name
+
+            if isinstance(path, str):
+                kk_sales["filename"] = path.split("/")[-1]
+            else:
+                kk_sales["filename"] = path.name
+
             sales_df = pd.concat(objs=[sales_df, kk_sales], axis=0)
         except:
             kk_sales = pd.read_excel(
                 path, sheet_name="KK", names=["data"], header=None
             )
             kk_sales["branch"] = "KK"
-            kk_sales["filename"] = path.name
+
+            if isinstance(path, str):
+                kk_sales["filename"] = path.split("/")[-1]
+            else:
+                kk_sales["filename"] = path.name
+
             sales_df = pd.concat(objs=[sales_df, kk_sales], axis=0)
 
             kb_sales = pd.read_excel(
                 path, sheet_name="KB", names=["data"], header=None
             )
             kb_sales["branch"] = "KB"
-            kb_sales["filename"] = path.name
+
+            if isinstance(path, str):
+                kb_sales["filename"] = path.split("/")[-1]
+            else:
+                kb_sales["filename"] = path.name
+
             sales_df = pd.concat(objs=[sales_df, kb_sales], axis=0)
 
     return sales_df
@@ -83,8 +94,17 @@ def read_expenses_data(expenses_data: list) -> pd.DataFrame:
     expenses_data: a list of file paths
     """
 
-    kabete_files = [file for file in expenses_data if "KB" in file.name]
-    kikuyu_files = [file for file in expenses_data if "KB" not in file.name]
+    # check if expenses_data is a list of strings
+    all_strings = all([isinstance(path, str) for path in expenses_data])
+
+    if all_strings:
+        kabete_files = [file for file in expenses_data if "KB" in file]
+        kikuyu_files = [file for file in expenses_data if "KB" not in file]
+    else:
+        kabete_files = [file for file in expenses_data if "KB" in file.name]
+        kikuyu_files = [
+            file for file in expenses_data if "KB" not in file.name
+        ]
 
     assert len(expenses_data) == len(kabete_files) + len(kikuyu_files)
 
