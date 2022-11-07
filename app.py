@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 import base64
 
-st.title("Crafted Pizza App")
+st.title("Crafted Pizza")
 
 
 @st.cache
