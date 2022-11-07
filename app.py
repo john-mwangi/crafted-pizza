@@ -1,46 +1,10 @@
 import streamlit as st
 from src.data import import_data, summarise_data
 from datetime import datetime
-import sys
+from pathlib import Path
+import base64
 
 st.title("Crafted Pizza App")
-
-
-download_html = f'<a href="www/Nov2021.xlsx">Data template</a>'
-
-
-with st.sidebar:
-    st.write("### Instructions:")
-    st.write(
-        """
-        1. Save sales data for each month in the data template
-        2. Export expenses data for each branch and mark Kabete data with KB
-        3. Save sales data for all months in a single folder
-        4. Save expenses data for all months in another folder
-        5. Enter the paths for the folders below
-        6. Select a start and end period
-        """
-    )
-    st.markdown(download_html, unsafe_allow_html=True)
-
-    start_col, end_col = st.columns(2, gap="large")
-    with start_col:
-        start_period = st.date_input(
-            label="Start Period",
-            value=datetime(year=2020, month=1, day=1),
-        )
-        start_period = int(start_period.strftime("%Y%m"))
-
-    with end_col:
-        end_period = st.date_input(label="End Period", value=datetime.now())
-        end_period = int(end_period.strftime("%Y%m"))
-
-    sales_data = st.file_uploader(
-        label="Sales Data", type="xlsx", accept_multiple_files=True
-    )
-    expenses_data = st.file_uploader(
-        label="Expenses Data", type="csv", accept_multiple_files=True
-    )
 
 
 @st.cache
@@ -66,6 +30,74 @@ def get_results(sales_data, expenses_data):
 
     return results
 
+
+def authorise_app():
+    """Authorise this app using OAuth2"""
+    # ref: https://www.youtube.com/watch?v=vQQEaSnQ_bs
+    raise NotImplementedError
+
+
+def download_data(real_file_id):
+    """Downloads a Google Drive folder
+
+    Args:
+        real_file_id: ID of the file to download
+    Returns : IO object with location.
+
+    Load pre-authorized user credentials from the environment.
+    TODO(developer) - See https://developers.google.com/identity
+    for guides on implementing OAuth2 for the application.
+    """
+    # ref: https://developers.google.com/drive/api/v3/manage-downloads
+    raise NotImplementedError
+
+
+def create_download_link(file_path):
+    file_bytes = Path(file_path).read_bytes()
+    b64 = base64.b64encode(file_bytes).decode()
+    html = f'<a href="data:application/octet-stream;base64,{b64}" download="sales_template.xlsx">Data template</a>'
+    return html
+
+
+html = create_download_link("./www/Nov2021.xlsx")
+
+# SIDEBAR
+with st.sidebar:
+    st.markdown(html, unsafe_allow_html=True)
+
+    start_col, end_col = st.columns(2, gap="large")
+    with start_col:
+        start_period = st.date_input(
+            label="Start Period",
+            value=datetime(year=2020, month=1, day=1),
+        )
+        start_period = int(start_period.strftime("%Y%m"))
+
+    with end_col:
+        end_period = st.date_input(label="End Period", value=datetime.now())
+        end_period = int(end_period.strftime("%Y%m"))
+
+    sales_data = st.file_uploader(
+        label="Sales Data", type="xlsx", accept_multiple_files=True
+    )
+    expenses_data = st.file_uploader(
+        label="Expenses Data", type="csv", accept_multiple_files=True
+    )
+
+
+# MAIN BODY
+with st.expander(label="Instructions"):
+    st.write(
+        """
+        1. Save sales data for each month in the data template
+        2. Save sales data for all months in a single folder
+        3. Export expenses data for each branch
+        4. Mark Kabete expenses with KB in the file name
+        5. Save expenses data for all months in another folder
+        6. Select your data
+        7. Select a start and end period
+        """
+    )
 
 if len(sales_data) == 0 or len(expenses_data) == 0:
     st.write("*Enter the paths to the sales and expenses data to start!*")
@@ -106,24 +138,3 @@ if len(sales_data) > 0 and len(expenses_data) > 0:
         st.error(
             "*Please check the paths to the sales and expenses data and try again!*"
         )
-
-
-def authorise_app():
-    """Authorise this app using OAuth2"""
-    # ref: https://www.youtube.com/watch?v=vQQEaSnQ_bs
-    raise NotImplementedError
-
-
-def download_data(real_file_id):
-    """Downloads a Google Drive folder
-
-    Args:
-        real_file_id: ID of the file to download
-    Returns : IO object with location.
-
-    Load pre-authorized user credentials from the environment.
-    TODO(developer) - See https://developers.google.com/identity
-    for guides on implementing OAuth2 for the application.
-    """
-    # ref: https://developers.google.com/drive/api/v3/manage-downloads
-    raise NotImplementedError

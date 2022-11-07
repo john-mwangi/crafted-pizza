@@ -7,9 +7,13 @@ sys.path.append("../../")
 from configs import config
 
 
-def read_sales_data(sales_data: str | list = config.SALES_DIR) -> pd.DataFrame:
+def read_sales_data(sales_data: list) -> pd.DataFrame:
     """Read sales data stored in Excel files. All Excel sheets have either
     Sheet1 or KK/KB.
+
+    Args:
+    ---
+    sales_data: a list of file paths
     """
     sales_df = pd.DataFrame()
     for path in sales_data:
@@ -71,10 +75,13 @@ def extract_sales_date(sales_data: pd.DataFrame) -> pd.DataFrame:
     return sales_data
 
 
-def read_expenses_data(
-    expenses_data: str | list = config.EXPENSES_DIR,
-) -> pd.DataFrame:
-    """Read expenses data in the Expenses directory stored as csv files."""
+def read_expenses_data(expenses_data: list) -> pd.DataFrame:
+    """Read expenses data in the Expenses directory stored as csv files.
+
+    Args:
+    ---
+    expenses_data: a list of file paths
+    """
 
     kabete_files = [file for file in expenses_data if "KB" in file.name]
     kikuyu_files = [file for file in expenses_data if "KB" not in file.name]
