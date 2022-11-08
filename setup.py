@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="crafted-pizza",
+    name="crafted_pizza",
     version="1.2.0",
     description="Crafted Pizza App",
     url="https://github.com/john-mwangi/crafted-pizza",
