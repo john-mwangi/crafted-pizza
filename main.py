@@ -10,10 +10,5 @@ if __name__ == "__main__":
     sales_paths = glob(pathname=os.path.join(config.SALES_DIR, "*.xls*"))
     expenses_paths = glob(pathname=os.path.join(config.EXPENSES_DIR, "*.csv"))
 
-    get_results(
-        sales_data=sales_paths,
-        expenses_data=expenses_paths,
-        start_period=start_period,
-        end_period=end_period,
-    )
+    get_results(sales_data=sales_paths, expenses_data=expenses_paths)
     exit()

@@ -8,7 +8,7 @@ st.title("Crafted Pizza")
 
 
 @st.cache
-def get_results(sales_data, expenses_data, start_period, end_period):
+def get_results(sales_data, expenses_data):
     sales_data = import_data.read_sales_data(sales_data)
     sales_data = import_data.extract_revenue(sales_data)
     sales_data = import_data.extract_sales_date(sales_data)
