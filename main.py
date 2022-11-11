@@ -2,7 +2,6 @@ from configs import config
 from glob import glob
 import os
 from app import get_results
-from datetime import datetime
 
 if __name__ == "__main__":
     start_period = 202001
