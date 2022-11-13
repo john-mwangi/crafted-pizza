@@ -37,20 +37,12 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
-<<<<<<< HEAD
-=======
-  format-scripts:
->>>>>>> 578c17f (Update circle ci:)
       - run:
           name: Sort imports
           command: isort main.py src/data
 
       - run:
-<<<<<<< HEAD
           name: Run black
-=======
-          name: Format scripts
->>>>>>> 578c17f (Update circle ci:)
           command: black main.py src/data
 
 # Invoke jobs via workflows
@@ -60,14 +52,9 @@ workflows:
   build-test: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-<<<<<<< HEAD
       - build-and-test:
           filters:
             branches:
               only:
                 - main
                 - circleci-project-setup
-=======
-      - build-and-test
-      - format-scripts
->>>>>>> 578c17f (Update circle ci:)
