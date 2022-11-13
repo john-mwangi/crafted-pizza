@@ -8,7 +8,7 @@ st.title("Crafted Pizza")
 
 
 @st.cache
-def get_results(sales_data, expenses_data):
+def get_results(sales_data, expenses_data, start_period, end_period):
     sales_data = import_data.read_sales_data(sales_data)
     sales_data = import_data.extract_revenue(sales_data)
     sales_data = import_data.extract_sales_date(sales_data)
@@ -116,7 +116,12 @@ if len(sales_data) == 0 or len(expenses_data) == 0:
 
 if len(sales_data) > 0 and len(expenses_data) > 0:
     try:
-        results, transactions = get_results(sales_data, expenses_data)
+        results, transactions = get_results(
+            sales_data,
+            expenses_data,
+            start_period=start_period,
+            end_period=end_period,
+        )
 
         period_df = results.get("profit_summary")
 
