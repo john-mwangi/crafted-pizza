@@ -3,11 +3,7 @@ import os
 from glob import glob
 
 from app import get_results
-<<<<<<< HEAD
 from configs import config
-=======
-import argparse
->>>>>>> f072879 (Add cli params)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
