@@ -57,19 +57,21 @@ def download_data(real_file_id):
     raise NotImplementedError
 
 
-def create_download_link(file_path):
+def create_download_link(file_name: str):
     """
+    Downloads a file from the 'www' directory \n
     str -> bytes -> enc b64 bytes -> b64 str -> dec b64 str -> str
     my_string -> my_string.encode() -> b64encode(my_bytes) -> b64.decode()** -> b64decode(b64) -> my_bytes.decode()
     """
     # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806/12?page=3
+    file_path = Path("./www").resolve() / file_name
     file_bytes = Path(file_path).read_bytes()
     b64_str = base64.b64encode(file_bytes).decode()
     html = f'<a href="data:application/octet-stream;base64,{b64_str}" download="sales_template.xlsx">Data template</a>'
     return html
 
 
-html = create_download_link("./www/Nov2021.xlsx")
+html = create_download_link(file_name="Nov2021.xlsx")
 
 # SIDE BAR
 with st.sidebar:
