@@ -37,6 +37,14 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
+  format-scripts:
+      - run:
+          name: Sort imports
+          command: isort main.py src/data
+
+      - run:
+          name: Format scripts
+          command: black main.py src/data
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -45,3 +53,4 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - format-scripts
