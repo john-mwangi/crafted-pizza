@@ -26,9 +26,7 @@ def read_sales_data(sales_data: list) -> pd.DataFrame:
 
             sales_df = pd.concat(objs=[sales_df, kk_sales], axis=0)
         except:
-            kk_sales = pd.read_excel(
-                path, sheet_name="KK", names=["data"], header=None
-            )
+            kk_sales = pd.read_excel(path, sheet_name="KK", names=["data"], header=None)
             kk_sales["branch"] = "KK"
 
             if isinstance(path, str):
@@ -38,9 +36,7 @@ def read_sales_data(sales_data: list) -> pd.DataFrame:
 
             sales_df = pd.concat(objs=[sales_df, kk_sales], axis=0)
 
-            kb_sales = pd.read_excel(
-                path, sheet_name="KB", names=["data"], header=None
-            )
+            kb_sales = pd.read_excel(path, sheet_name="KB", names=["data"], header=None)
             kb_sales["branch"] = "KB"
 
             if isinstance(path, str):
@@ -59,14 +55,10 @@ def extract_revenue(sales_data: pd.DataFrame) -> pd.DataFrame:
         revenue_=lambda df: df.data.str.extract(r".*-(\d+/?\d+).*"),
     )
 
-    revenues = (
-        sales_data.revenue_.str.split("/", expand=True).fillna(0).astype(float)
-    )
+    revenues = sales_data.revenue_.str.split("/", expand=True).fillna(0).astype(float)
 
     revenues = revenues.assign(revenue=lambda df: df[0] + df[1])
-    sales_data = sales_data.assign(revenue=revenues.revenue).drop(
-        columns="revenue_"
-    )
+    sales_data = sales_data.assign(revenue=revenues.revenue).drop(columns="revenue_")
 
     return sales_data
 
@@ -78,9 +70,7 @@ def extract_sales_date(sales_data: pd.DataFrame) -> pd.DataFrame:
         day=lambda df: df.data.str.extract(r"^(\d{1,2})[a-z]{1,2}$").fillna(
             method="ffill"
         ),
-        date=lambda df: pd.to_datetime(
-            df.day + "/" + df.month, format="%d/%b%Y"
-        ),
+        date=lambda df: pd.to_datetime(df.day + "/" + df.month, format="%d/%b%Y"),
     )
 
     return sales_data
@@ -102,9 +92,7 @@ def read_expenses_data(expenses_data: list) -> pd.DataFrame:
         kikuyu_files = [file for file in expenses_data if "KB" not in file]
     else:
         kabete_files = [file for file in expenses_data if "KB" in file.name]
-        kikuyu_files = [
-            file for file in expenses_data if "KB" not in file.name
-        ]
+        kikuyu_files = [file for file in expenses_data if "KB" not in file.name]
 
     assert len(expenses_data) == len(kabete_files) + len(kikuyu_files)
 

@@ -1,8 +1,10 @@
-import streamlit as st
-from src.data import import_data, summarise_data
+import base64
 from datetime import datetime
 from pathlib import Path
-import base64
+
+import streamlit as st
+
+from src.data import import_data, summarise_data
 
 st.title("Crafted Pizza")
 
@@ -132,13 +134,9 @@ if len(sales_data) > 0 and len(expenses_data) > 0:
                 value=f"{results.get('total_profit'):,.0f}",
             )
         with KB_col:
-            st.metric(
-                label="Kabete Profit", value=f"{results.get('KB_profit'):,.0f}"
-            )
+            st.metric(label="Kabete Profit", value=f"{results.get('KB_profit'):,.0f}")
         with KK_col:
-            st.metric(
-                label="Kikuyu Profit", value=f"{results.get('KK_profit'):,.0f}"
-            )
+            st.metric(label="Kikuyu Profit", value=f"{results.get('KK_profit'):,.0f}")
 
         st.caption("*Hit refresh to update the results!*")
         st.dataframe(period_df)

@@ -1,8 +1,9 @@
-from configs import config
-from glob import glob
-import os
-from app import get_results
 import argparse
+import os
+from glob import glob
+
+from app import get_results
+from configs import config
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
