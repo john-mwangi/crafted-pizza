@@ -148,7 +148,7 @@ if len(sales_data) > 0 and len(expenses_data) > 0:
             with trans_col:
                 st.download_button(
                     label="Download sales",
-                    data=transactions.get("sales").to_csv(index=True),
+                    data=transactions.get("sales").to_csv(index=False),
                     mime="text/csv",
                     file_name="sales_data.csv",
                 )
