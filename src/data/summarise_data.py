@@ -1,12 +1,11 @@
 """This module summarises financial performance."""
 
-import pandas as pd
 from datetime import datetime
 
+import pandas as pd
 
-def summarise_performance(
-    performance_data: pd.DataFrame, on_col: str = "revenue"
-):
+
+def summarise_performance(performance_data: pd.DataFrame, on_col: str = "revenue"):
     """Summarise sales by year/month and branch.
 
     Args:
@@ -19,9 +18,9 @@ def summarise_performance(
         year_month=lambda df: df.date.dt.strftime("%Y%m").astype(int),
     )
 
-    summarised_data = performance_data.groupby(
-        by=["year_month", "branch"]
-    ).aggregate(amount=(f"{on_col}", "sum"))
+    summarised_data = performance_data.groupby(by=["year_month", "branch"]).aggregate(
+        amount=(f"{on_col}", "sum")
+    )
 
     performance_summary = (
         summarised_data.pivot_table(
