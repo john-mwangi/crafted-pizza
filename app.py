@@ -28,7 +28,12 @@ def get_results(sales_data, expenses_data):
         end_period=end_period,
     )
 
-    return results
+    transactions = {
+        "sales": sales_data,
+        "expenses": expenses_data,
+    }
+
+    return results, transactions
 
 
 def authorise_app():
@@ -70,7 +75,7 @@ html = create_download_link("./www/Nov2021.xlsx")
 with st.sidebar:
     st.markdown(html, unsafe_allow_html=True)
 
-    start_col, end_col = st.columns(2, gap="large")
+    start_col, end_col = st.columns(2, gap="small")
     with start_col:
         start_period = st.date_input(
             label="Start Period",
@@ -109,7 +114,7 @@ if len(sales_data) == 0 or len(expenses_data) == 0:
 
 if len(sales_data) > 0 and len(expenses_data) > 0:
     try:
-        results = get_results(sales_data, expenses_data)
+        results, transactions = get_results(sales_data, expenses_data)
 
         period_df = results.get("profit_summary")
 
@@ -132,12 +137,21 @@ if len(sales_data) > 0 and len(expenses_data) > 0:
         st.dataframe(period_df)
 
         with st.sidebar:
-            st.download_button(
-                label="Download results",
-                data=period_df.to_csv(index=True),
-                mime="text/csv",
-                file_name="profit_summary.csv",
-            )
+            res_col, trans_col = st.columns(spec=2, gap="small")
+            with res_col:
+                st.download_button(
+                    label="Download results",
+                    data=period_df.to_csv(index=True),
+                    mime="text/csv",
+                    file_name="profit_summary.csv",
+                )
+            with trans_col:
+                st.download_button(
+                    label="Download sales",
+                    data=transactions.get("sales").to_csv(index=True),
+                    mime="text/csv",
+                    file_name="sales_data.csv",
+                )
 
     except AttributeError:
         st.error(
